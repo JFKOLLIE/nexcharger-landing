@@ -648,22 +648,62 @@
     <!-- Contact -->
     <section class="section" id="contact">
         <h2>Get in Touch</h2>
-        <div class="contact-form">
-            <h3 style="text-align: center; margin-bottom: 20px; color: #1f2937;">Have Questions? We're Here to Help!</h3>
-            <form>
-                <input type="text" name="name" placeholder="Your Name" required>
-                <input type="email" name="email" placeholder="Your Email" required>
-                <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
-                <button type="submit" class="btn-primary" style="width: 100%;">
-                    <i class="fas fa-paper-plane" style="margin-right: 10px;"></i>
-                    Send Message
-                </button>
-            </form>
-            <div style="text-align: center; margin-top: 20px; color: #6b7280;">
-                <p><i class="fas fa-envelope" style="margin-right: 10px;"></i><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cab9bfbabaa5b8be8aa4afb2a9a2abb8adafb8e4a5a4a6a3a4af">[email&#160;protected]</a></p>
-                <p><i class="fas fa-phone" style="margin-right: 10px;"></i>+1 872 279 3024</p>
-            </div>
-        </div>
+    <div class="contact-form">
+    <h3 style="text-align: center; margin-bottom: 20px; color: #1f2937;">Have Questions? We're Here to Help!</h3>
+    
+    <!-- Netlify Form with spam protection -->
+    <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+        <!-- Hidden honeypot field for spam protection -->
+        <p style="display: none;">
+            <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+        </p>
+        
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+        
+        <!-- Hidden fields for better email notifications -->
+        <input type="hidden" name="form-name" value="contact">
+        <input type="hidden" name="subject" value="New Contact from NexCharger Website">
+        
+        <button type="submit" class="btn-primary" style="width: 100%;">
+            <i class="fas fa-paper-plane" style="margin-right: 10px;"></i>
+            Send Message
+        </button>
+    </form>
+    
+    <!-- Success message (hidden by default) -->
+    <div id="form-success" style="display: none; text-align: center; margin-top: 20px; padding: 15px; background-color: #d1fae5; border-radius: 8px; color: #065f46;">
+        <i class="fas fa-check-circle" style="margin-right: 10px;"></i>
+        Thank you! Your message has been sent successfully. We'll get back to you within 24 hours.
+    </div>
+    
+    <div style="text-align: center; margin-top: 20px; color: #6b7280;">
+        <p><i class="fas fa-envelope" style="margin-right: 10px;"></i>support@nexcharger.online</p>
+        <p><i class="fas fa-phone" style="margin-right: 10px;"></i>+1 872 279 3024</p>
+    </div>
+</div>
+
+<!-- Success handling script -->
+<script>
+// Check if form was successfully submitted
+if (window.location.search.includes('success') || window.location.hash.includes('success')) {
+    document.getElementById('form-success').style.display = 'block';
+    document.querySelector('.contact-form form').style.display = 'none';
+    
+    // Scroll to success message
+    document.getElementById('form-success').scrollIntoView({ behavior: 'smooth' });
+    
+    // Show form again after 5 seconds
+    setTimeout(function() {
+        document.getElementById('form-success').style.display = 'none';
+        document.querySelector('.contact-form form').style.display = 'block';
+        // Clean URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }, 5000);
+}
+</script>
+    
     </section>
 
     <!-- Footer -->
