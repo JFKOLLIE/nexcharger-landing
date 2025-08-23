@@ -651,32 +651,19 @@
     <div class="contact-form">
     <h3 style="text-align: center; margin-bottom: 20px; color: #1f2937;">Have Questions? We're Here to Help!</h3>
     
-    <!-- Netlify Form with spam protection -->
-    <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
-        <!-- Hidden honeypot field for spam protection -->
-        <p style="display: none;">
-            <label>Don't fill this out if you're human: <input name="bot-field" /></label>
-        </p>
+    <!-- Netlify form with explicit attributes -->
+    <form name="contact" method="POST" data-netlify="true">
+        <input type="hidden" name="form-name" value="contact" />
         
         <input type="text" name="name" placeholder="Your Name" required>
         <input type="email" name="email" placeholder="Your Email" required>
         <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
-        
-        <!-- Hidden fields for better email notifications -->
-        <input type="hidden" name="form-name" value="contact">
-        <input type="hidden" name="subject" value="New Contact from NexCharger Website">
         
         <button type="submit" class="btn-primary" style="width: 100%;">
             <i class="fas fa-paper-plane" style="margin-right: 10px;"></i>
             Send Message
         </button>
     </form>
-    
-    <!-- Success message (hidden by default) -->
-    <div id="form-success" style="display: none; text-align: center; margin-top: 20px; padding: 15px; background-color: #d1fae5; border-radius: 8px; color: #065f46;">
-        <i class="fas fa-check-circle" style="margin-right: 10px;"></i>
-        Thank you! Your message has been sent successfully. We'll get back to you within 24 hours.
-    </div>
     
     <div style="text-align: center; margin-top: 20px; color: #6b7280;">
         <p><i class="fas fa-envelope" style="margin-right: 10px;"></i>support@nexcharger.online</p>
