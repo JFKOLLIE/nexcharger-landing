@@ -651,14 +651,15 @@
     <div class="contact-form">
     <h3 style="text-align: center; margin-bottom: 20px; color: #1f2937;">Have Questions? We're Here to Help!</h3>
     
-    <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
-        <p style="display: none;">
-            <label>Don't fill this out: <input name="bot-field" /></label>
-        </p>
-        
+    <!-- Formspree Contact Form -->
+    <form action="https://formspree.io/f/xzzvnnnq" method="POST">
         <input type="text" name="name" placeholder="Your Name" required>
         <input type="email" name="email" placeholder="Your Email" required>
         <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+        
+        <!-- Formspree Settings -->
+        <input type="hidden" name="_subject" value="New Contact from NexCharger Website">
+        <input type="hidden" name="_next" value="https://nexcharger.online">
         
         <button type="submit" class="btn-primary" style="width: 100%;">
             <i class="fas fa-paper-plane" style="margin-right: 10px;"></i>
@@ -671,6 +672,7 @@
         <p><i class="fas fa-phone" style="margin-right: 10px;"></i>+1 872 279 3024</p>
     </div>
 </div>
+
 <script>
 // Check if form was successfully submitted
 if (window.location.search.includes('success') || window.location.hash.includes('success')) {
@@ -886,11 +888,6 @@ if (window.location.search.includes('success') || window.location.hash.includes(
         });
     </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"97370712ccaaa6ee","serverTiming":{"name":{"cfExtPri":true,"cfEdge":true,"cfOrigin":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2025.8.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
-<form name="contact" netlify netlify-honeypot="bot-field" hidden>
-    <input type="text" name="name" />
-    <input type="email" name="email" />
-    <textarea name="message"></textarea>
-</form>
 
 </body>
 </html>
