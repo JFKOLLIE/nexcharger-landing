@@ -650,20 +650,32 @@
         <h2>Get in Touch</h2>
     <div class="contact-form">
     <h3 style="text-align: center; margin-bottom: 20px; color: #1f2937;">Have Questions? We're Here to Help!</h3>
-    
-    <form action="https://formspree.io/f/xzzvnnnq" method="POST">
-        <input type="text" name="name" placeholder="Your Name" required>
-        <input type="email" name="email" placeholder="Your Email" required>
-        <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
         
-        <button type="submit" class="btn-primary" style="width: 100%; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer;">
+    <form action="https://formspree.io/f/xzzvnnnq" method="POST">
+        <label style="display: block; margin-bottom: 15px;">
+            Your Name:
+            <input type="text" name="name" placeholder="Your Name" required style="width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 16px;">
+        </label>
+        
+        <label style="display: block; margin-bottom: 15px;">
+            Your Email:
+            <input type="email" name="email" placeholder="Your Email" required style="width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 16px;">
+        </label>
+        
+        <label style="display: block; margin-bottom: 15px;">
+            Your Message:
+            <textarea name="message" rows="5" placeholder="Your Message" required style="width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 16px; font-family: inherit;"></textarea>
+        </label>
+        
+        <button type="submit" class="btn-primary" style="width: 100%;">
+            <i class="fas fa-paper-plane" style="margin-right: 10px;"></i>
             Send Message
         </button>
     </form>
     
     <div style="text-align: center; margin-top: 20px; color: #6b7280;">
-        <p>✉️ support@nexcharger.online</p>
-        <p>📞 +1 872 279 3024</p>
+        <p><i class="fas fa-envelope" style="margin-right: 10px;"></i>support@nexcharger.online</p>
+        <p><i class="fas fa-phone" style="margin-right: 10px;"></i>+1 872 279 3024</p>
     </div>
 </div>
 
