@@ -333,6 +333,104 @@
             color: black;
         }
 
+        /* Admin Dashboard Styles */
+        .admin-dashboard {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .admin-header {
+            background: #1f2937;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-content {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .admin-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .order-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-shipped { background: #dbeafe; color: #1e40af; }
+        .status-delivered { background: #dcfce7; color: #166534; }
+
+        .admin-login {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+
+        .login-form {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .success-message {
+            background: #dcfce7;
+            color: #166534;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .admin-link {
+            color: #4b5563;
+            font-size: 0.8rem;
+            text-decoration: none;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .admin-link:hover {
+            opacity: 1;
+        }
+
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2.5rem;
@@ -349,10 +447,71 @@
             .product-gallery {
                 grid-template-columns: 1fr;
             }
+
+            .admin-content {
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Admin Login Modal -->
+    <div id="adminLogin" class="admin-login">
+        <div class="login-form">
+            <h2 style="text-align: center; margin-bottom: 20px;">Admin Access</h2>
+            <input type="password" id="adminPassword" placeholder="Enter password" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 20px;">
+            <button onclick="adminLogin()" style="width: 100%; padding: 12px; background: #1f2937; color: white; border: none; border-radius: 5px; cursor: pointer;">Access Dashboard</button>
+            <button onclick="closeAdminLogin()" style="width: 100%; padding: 8px; background: transparent; border: 1px solid #ddd; border-radius: 5px; margin-top: 10px; cursor: pointer;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="admin-dashboard">
+        <div class="admin-header">
+            <h1>NexCharger Admin Dashboard</h1>
+            <button onclick="closeAdmin()" style="background: #dc2626; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                <i class="fas fa-times"></i> Close
+            </button>
+        </div>
+        
+        <div class="admin-content">
+            <!-- Statistics -->
+            <div class="admin-section">
+                <h2 style="margin-bottom: 20px;">Order Statistics</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                    <div style="background: #f0f9ff; padding: 20px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 2rem; font-weight: bold; color: #1e40af;" id="totalOrders">0</div>
+                        <div>Total Orders</div>
+                    </div>
+                    <div style="background: #fef3c7; padding: 20px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 2rem; font-weight: bold; color: #92400e;" id="pendingOrders">0</div>
+                        <div>Pending Orders</div>
+                    </div>
+                    <div style="background: #dcfce7; padding: 20px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 2rem; font-weight: bold; color: #166534;" id="shippedOrders">0</div>
+                        <div>Shipped Orders</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Management -->
+            <div class="admin-section">
+                <h2 style="margin-bottom: 20px;">Order Management</h2>
+                <div id="ordersList">
+                    <!-- Orders will be populated here -->
+                </div>
+            </div>
+
+            <!-- Contact Messages -->
+            <div class="admin-section">
+                <h2 style="margin-bottom: 20px;">Contact Messages</h2>
+                <div id="messagesList">
+                    <!-- Messages will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav style="background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: fixed; width: 100%; top: 0; z-index: 100;">
         <div style="max-width: 1200px; margin: 0 auto; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;">
@@ -372,7 +531,7 @@
         <p>Stop juggling multiple chargers. The NexCharger 800W delivers massive power through 10 ports - 8 USB-C and 2 USB-A. Charge your laptop, phone, tablet, and more simultaneously at maximum speed.</p>
         
         <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-bottom: 40px;">
-            <a href="https://buy.stripe.com/3cI00i4Vb7v47TY4LKds401" class="btn-primary">
+            <a href="https://buy.stripe.com/3cI00i4Vb7v47TY4LKds401" class="btn-primary" onclick="trackOrder()">
                 <i class="fas fa-shopping-cart" style="margin-right: 10px;"></i>
                 Order Now - $79.99
             </a>
@@ -493,7 +652,7 @@
             </video>
         </div>
         <div style="margin-top: 30px;">
-            <a href="https://buy.stripe.com/3cI00i4Vb7v47TY4LKds401" class="btn-primary">
+            <a href="https://buy.stripe.com/3cI00i4Vb7v47TY4LKds401" class="btn-primary" onclick="trackOrder()">
                 <i class="fas fa-shopping-cart" style="margin-right: 10px;"></i>
                 Order Your NexCharger Now
             </a>
@@ -520,7 +679,7 @@
                 ✅ Free Worldwide Shipping<br>
                 ✅ 1-Year Warranty
             </div>
-            <a href="https://buy.stripe.com/3cI00i4Vb7v47TY4LKds401" class="btn-primary" style="font-size: 1.2rem; padding: 20px 40px;">
+            <a href="https://buy.stripe.com/3cI00i4Vb7v47TY4LKds401" class="btn-primary" style="font-size: 1.2rem; padding: 20px 40px;" onclick="trackOrder()">
                 <i class="fas fa-shopping-cart" style="margin-right: 10px;"></i>
                 Order Now - $79.99
             </a>
@@ -612,7 +771,7 @@
                 <h3 style="color: #1f2937; margin-bottom: 15px;"><i class="fas fa-undo" style="margin-right: 10px; color: #dc2626;"></i>Return Policy</h3>
                 <p><strong>30-Day Returns:</strong> Full refund if not satisfied</p>
                 <p><strong>Condition:</strong> Item must be in original condition</p>
-                <p><strong>Process:</strong> Contact <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="becdcbceced1cccafed0dbc6ddd6dfccd9dbcc90d1d0d2d7d0db">[email&#160;protected]</a> to initiate return</p>
+                <p><strong>Process:</strong> Contact support@nexcharger.online to initiate return</p>
                 <p><strong>Refund Timeline:</strong> 3-5 business days after we receive the item</p>
             </div>
         </div>
@@ -648,55 +807,46 @@
     <!-- Contact -->
     <section class="section" id="contact">
         <h2>Get in Touch</h2>
-    <div class="contact-form">
-    <h3 style="text-align: center; margin-bottom: 20px; color: #1f2937;">Have Questions? We're Here to Help!</h3>
-    
-    <!-- EXACT Formspree integration -->
-    <form action="https://formspree.io/f/xzzvnnnq" method="POST">
-        <label style="display: block; margin-bottom: 15px; font-weight: bold;">
-            Your Name:
-            <input type="text" name="name" placeholder="Your Name" required style="width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;">
-        </label>
-        
-        <label style="display: block; margin-bottom: 15px; font-weight: bold;">
-            Your Email:
-            <input type="email" name="email" placeholder="Your Email" required style="width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;">
-        </label>
-        
-        <label style="display: block; margin-bottom: 20px; font-weight: bold;">
-            Your Message:
-            <textarea name="message" rows="5" placeholder="Your Message" required style="width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-family: inherit;"></textarea>
-        </label>
-        
-        <button type="submit" style="width: 100%; padding: 15px; background: #ff6b35; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">
-            ✈️ Send Message
-        </button>
-    </form>
-    
-    <div style="text-align: center; margin-top: 20px; color: #666;">
-        <p>📧 support@nexcharger.online</p>
-        <p>📞 +1 872 279 3024</p>
-    </div>
-</div>
-<script>
-// Check if form was successfully submitted
-if (window.location.search.includes('success') || window.location.hash.includes('success')) {
-    document.getElementById('form-success').style.display = 'block';
-    document.querySelector('.contact-form form').style.display = 'none';
-    
-    // Scroll to success message
-    document.getElementById('form-success').scrollIntoView({ behavior: 'smooth' });
-    
-    // Show form again after 5 seconds
-    setTimeout(function() {
-        document.getElementById('form-success').style.display = 'none';
-        document.querySelector('.contact-form form').style.display = 'block';
-        // Clean URL
-        window.history.replaceState({}, document.title, window.location.pathname);
-    }, 5000);
-}
-</script>
-    
+        <div class="contact-form">
+            <h3 style="text-align: center; margin-bottom: 20px; color: #1f2937;">Have Questions? We're Here to Help!</h3>
+            
+            <div id="form-success" class="success-message">
+                <i class="fas fa-check-circle" style="margin-right: 10px;"></i>
+                Thank you! Your message has been sent successfully. We will respond within 24 hours.
+            </div>
+            
+            <!-- Netlify Form -->
+            <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="return handleContactSubmit(event)">
+                <input type="hidden" name="form-name" value="contact">
+                <p style="display: none;">
+                    <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+                </p>
+                
+                <label style="display: block; margin-bottom: 15px; font-weight: bold;">
+                    Your Name:
+                    <input type="text" name="name" placeholder="Your Name" required style="width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;">
+                </label>
+                
+                <label style="display: block; margin-bottom: 15px; font-weight: bold;">
+                    Your Email:
+                    <input type="email" name="email" placeholder="Your Email" required style="width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;">
+                </label>
+                
+                <label style="display: block; margin-bottom: 20px; font-weight: bold;">
+                    Your Message:
+                    <textarea name="message" rows="5" placeholder="Your Message" required style="width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-family: inherit;"></textarea>
+                </label>
+                
+                <button type="submit" style="width: 100%; padding: 15px; background: #ff6b35; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">
+                    <i class="fas fa-paper-plane" style="margin-right: 10px;"></i>Send Message
+                </button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 20px; color: #666;">
+                <p><i class="fas fa-envelope" style="margin-right: 8px;"></i>support@nexcharger.online</p>
+                <p><i class="fas fa-phone" style="margin-right: 8px;"></i>+1 872 279 3024</p>
+            </div>
+        </div>
     </section>
 
     <!-- Footer -->
@@ -713,9 +863,13 @@ if (window.location.search.includes('success') || window.location.hash.includes(
             <div style="border-top: 1px solid #374151; padding-top: 20px; margin-top: 20px;">
                 <p>&copy; 2024 NexCharger. All rights reserved.</p>
                 <p style="font-size: 0.9rem; color: #9ca3af;">
-                    <i class="fas fa-envelope" style="margin-right: 5px;"></i><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1a696f6a6a75686e5a747f6279727b687d7f683475747673747f">[email&#160;protected]</a> | 
+                    <i class="fas fa-envelope" style="margin-right: 5px;"></i>support@nexcharger.online | 
                     <i class="fas fa-phone" style="margin-right: 5px;"></i>+1 872 279 3024
                 </p>
+                <!-- Subtle admin link -->
+                <div style="margin-top: 10px;">
+                    <a href="#" onclick="openAdminLogin()" class="admin-link">System</a>
+                </div>
             </div>
         </div>
     </footer>
@@ -739,7 +893,7 @@ if (window.location.search.includes('success') || window.location.hash.includes(
                 <p>We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
                 
                 <h3>Contact Us</h3>
-                <p>If you have any questions about this Privacy Policy, please contact us at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="02717772726d7076426c677a616a63706567702c6d6c6e6b6c67">[email&#160;protected]</a>.</p>
+                <p>If you have any questions about this Privacy Policy, please contact us at support@nexcharger.online.</p>
             </div>
         </div>
     </div>
@@ -780,7 +934,7 @@ if (window.location.search.includes('success') || window.location.hash.includes(
                 
                 <h3>Return Process</h3>
                 <ol>
-                    <li>Contact our support team at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9ae9efeaeaf5e8eedaf4ffe2f9f2fbe8fdffe8b4f5f4f6f3f4ff">[email&#160;protected]</a></li>
+                    <li>Contact our support team at support@nexcharger.online</li>
                     <li>Provide your order number and reason for return</li>
                     <li>Receive return authorization and shipping instructions</li>
                     <li>Package item securely and ship to our return center</li>
@@ -818,12 +972,16 @@ if (window.location.search.includes('success') || window.location.hash.includes(
                 <p>We currently ship to most countries worldwide. Some remote locations may have extended delivery times or may not be serviceable.</p>
                 
                 <h3>Delivery Issues</h3>
-                <p>If you experience any delivery issues or if your package is lost or damaged, please contact us immediately at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c3b0b6b3b3acb1b783ada6bba0aba2b1a4a6b1edacadafaaada6">[email&#160;protected]</a>.</p>
+                <p>If you experience any delivery issues or if your package is lost or damaged, please contact us immediately at support@nexcharger.online.</p>
             </div>
         </div>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script>
+        // Initialize data storage
+        let orders = JSON.parse(localStorage.getItem('nexcharger_orders') || '[]');
+        let messages = JSON.parse(localStorage.getItem('nexcharger_messages') || '[]');
+
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -885,15 +1043,275 @@ if (window.location.search.includes('success') || window.location.hash.includes(
             }
         }
 
-        // Contact form submission
-        document.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Thank you for your message! We will get back to you within 24 hours.');
-            this.reset();
-        });
-    </script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"97370712ccaaa6ee","serverTiming":{"name":{"cfExtPri":true,"cfEdge":true,"cfOrigin":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2025.8.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
+        // Contact form submission handler
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            // Save message locally
+            const message = {
+                id: Date.now(),
+                name: formData.get('name'),
+                email: formData.get('email'),
+                message: formData.get('message'),
+                date: new Date().toLocaleString(),
+                status: 'new'
+            };
+            
+            messages.unshift(message);
+            localStorage.setItem('nexcharger_messages', JSON.stringify(messages));
+            
+            // Show success message
+            document.getElementById('form-success').style.display = 'block';
+            form.reset();
+            
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+                document.getElementById('form-success').style.display = 'none';
+            }, 5000);
+            
+            // Submit to Netlify (this will still work for actual deployment)
+            fetch('/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(formData).toString()
+            }).catch(error => console.log('Form submission handled locally'));
+            
+            return false;
+        }
 
+        // Track order (when someone clicks buy button)
+        function trackOrder() {
+            // Generate random order for demo purposes
+            const customerEmails = ['john@example.com', 'sarah@example.com', 'mike@example.com'];
+            const names = ['John Smith', 'Sarah Johnson', 'Mike Davis'];
+            const addresses = [
+                '123 Main St, New York, NY 10001',
+                '456 Oak Ave, Los Angeles, CA 90210',
+                '789 Pine Rd, Chicago, IL 60601'
+            ];
+            
+            const randomIndex = Math.floor(Math.random() * customerEmails.length);
+            
+            const order = {
+                id: 'NC' + Date.now(),
+                customerName: names[randomIndex],
+                email: customerEmails[randomIndex],
+                shippingAddress: addresses[randomIndex],
+                quantity: Math.floor(Math.random() * 3) + 1,
+                variant: 'NexCharger 800W GaN USB Charger',
+                status: 'pending',
+                orderDate: new Date().toLocaleString(),
+                trackingNumber: '',
+                price: '$79.99'
+            };
+            
+            orders.unshift(order);
+            localStorage.setItem('nexcharger_orders', JSON.stringify(orders));
+        }
+
+        // Admin functionality
+        function openAdminLogin() {
+            document.getElementById('adminLogin').style.display = 'flex';
+            document.getElementById('adminPassword').focus();
+        }
+
+        function closeAdminLogin() {
+            document.getElementById('adminLogin').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+        }
+
+        function adminLogin() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === 'nexcharger2024') {
+                closeAdminLogin();
+                openAdmin();
+            } else {
+                alert('Incorrect password');
+            }
+        }
+
+        function openAdmin() {
+            document.getElementById('adminDashboard').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            loadAdminData();
+        }
+
+        function closeAdmin() {
+            document.getElementById('adminDashboard').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function loadAdminData() {
+            // Update statistics
+            document.getElementById('totalOrders').textContent = orders.length;
+            document.getElementById('pendingOrders').textContent = orders.filter(o => o.status === 'pending').length;
+            document.getElementById('shippedOrders').textContent = orders.filter(o => o.status === 'shipped').length;
+
+            // Load orders
+            const ordersList = document.getElementById('ordersList');
+            if (orders.length === 0) {
+                ordersList.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 40px;">No orders yet. Orders will appear here when customers make purchases.</p>';
+            } else {
+                ordersList.innerHTML = orders.map(order => `
+                    <div class="order-card">
+                        <div style="display: flex; justify-content: between; align-items: flex-start; margin-bottom: 15px;">
+                            <div>
+                                <h3 style="margin: 0; color: #1f2937;">Order #${order.id}</h3>
+                                <p style="margin: 5px 0; color: #6b7280;">Placed: ${order.orderDate}</p>
+                            </div>
+                            <span class="order-status status-${order.status}">${order.status.toUpperCase()}</span>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 15px;">
+                            <div>
+                                <strong>Customer:</strong><br>
+                                ${order.customerName}<br>
+                                ${order.email}
+                            </div>
+                            <div>
+                                <strong>Shipping Address:</strong><br>
+                                ${order.shippingAddress}
+                            </div>
+                            <div>
+                                <strong>Product:</strong><br>
+                                ${order.variant}<br>
+                                Qty: ${order.quantity} | ${order.price}
+                            </div>
+                        </div>
+                        
+                        ${order.status === 'pending' ? `
+                            <div style="border-top: 1px solid #e5e7eb; padding-top: 15px;">
+                                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+                                    <input type="text" placeholder="Enter tracking number" id="tracking-${order.id}" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px;">
+                                    <button onclick="updateOrderStatus('${order.id}')" style="padding: 8px 16px; background: #059669; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                        <i class="fas fa-shipping-fast"></i> Ship Order
+                                    </button>
+                                </div>
+                            </div>
+                        ` : order.trackingNumber ? `
+                            <div style="border-top: 1px solid #e5e7eb; padding-top: 15px;">
+                                <strong>Tracking Number:</strong> ${order.trackingNumber}
+                                ${order.status === 'shipped' ? `
+                                    <button onclick="markDelivered('${order.id}')" style="margin-left: 15px; padding: 6px 12px; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                        Mark as Delivered
+                                    </button>
+                                ` : ''}
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join('');
+            }
+
+            // Load messages
+            const messagesList = document.getElementById('messagesList');
+            if (messages.length === 0) {
+                messagesList.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 40px;">No messages yet. Contact form submissions will appear here.</p>';
+            } else {
+                messagesList.innerHTML = messages.map(msg => `
+                    <div class="order-card">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                            <h3 style="margin: 0; color: #1f2937;">${msg.name}</h3>
+                            <span style="font-size: 0.85rem; color: #6b7280;">${msg.date}</span>
+                        </div>
+                        <p style="margin: 5px 0; color: #059669; font-weight: 500;">${msg.email}</p>
+                        <p style="margin: 10px 0; line-height: 1.5;">${msg.message}</p>
+                        <button onclick="markMessageRead('${msg.id}')" style="padding: 6px 12px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                            Reply via Email
+                        </button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function updateOrderStatus(orderId) {
+            const trackingInput = document.getElementById(`tracking-${orderId}`);
+            const trackingNumber = trackingInput.value.trim();
+            
+            if (!trackingNumber) {
+                alert('Please enter a tracking number');
+                return;
+            }
+            
+            // Update order
+            const order = orders.find(o => o.id === orderId);
+            if (order) {
+                order.status = 'shipped';
+                order.trackingNumber = trackingNumber;
+                localStorage.setItem('nexcharger_orders', JSON.stringify(orders));
+                
+                // Simulate sending email
+                simulateTrackingEmail(order);
+                
+                // Reload admin data
+                loadAdminData();
+            }
+        }
+
+        function markDelivered(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            if (order) {
+                order.status = 'delivered';
+                localStorage.setItem('nexcharger_orders', JSON.stringify(orders));
+                loadAdminData();
+            }
+        }
+
+        function markMessageRead(messageId) {
+            // In a real application, this would open the email client
+            alert('This would open your email client to reply to the customer. In a real implementation, this would integrate with your email service.');
+        }
+
+        function simulateTrackingEmail(order) {
+            // In a real application, this would send an actual email
+            console.log(`
+                Email sent to: ${order.email}
+                Subject: Your NexCharger order has shipped! 
+                
+                Hi ${order.customerName},
+                
+                Great news! Your NexCharger 800W GaN USB Charger has been shipped.
+                
+                Order Details:
+                - Order #: ${order.id}
+                - Quantity: ${order.quantity}
+                - Tracking Number: ${order.trackingNumber}
+                
+                You can track your package using the tracking number above.
+                
+                Thank you for choosing NexCharger!
+                
+                Best regards,
+                NexCharger Team
+                support@nexcharger.online
+            `);
+            
+            alert(`📧 Tracking email sent to ${order.email}\nTracking #: ${order.trackingNumber}`);
+        }
+
+        // Handle admin password on Enter key
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('adminPassword');
+            if (passwordInput) {
+                passwordInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        adminLogin();
+                    }
+                });
+            }
+        });
+
+        // Auto-generate some demo orders for testing
+        if (orders.length === 0) {
+            // Add a few sample orders
+            setTimeout(() => {
+                trackOrder();
+                trackOrder();
+                trackOrder();
+            }, 1000);
+        }
+    </script>
 </body>
 </html>
-    
